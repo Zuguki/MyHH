@@ -6,6 +6,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddSingleton<FindWork.BL.Auth.IAuthBL, FindWork.BL.Auth.AuthBL>();
+builder.Services.AddSingleton<FindWork.DAL.IAuthDAL, FindWork.DAL.AuthDal>();
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())
