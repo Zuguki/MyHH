@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using FindWork.BL.Auth;
 using Microsoft.AspNetCore.Mvc;
 using FindWork.Models;
 using Microsoft.Extensions.Logging;
@@ -7,16 +8,18 @@ namespace FindWork.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly ILogger<HomeController> _logger;
+    private readonly ILogger<HomeController> logger;
+    private readonly ICurrentUser currentUser;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(ILogger<HomeController> logger, ICurrentUser currentUser)
     {
-        _logger = logger;
+        this.logger = logger;
+        this.currentUser = currentUser;
     }
 
     public IActionResult Index()
     {
-        return View();
+        return View(currentUser.IsLoggedIn());
     }
 
     public IActionResult Privacy()

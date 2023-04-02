@@ -39,8 +39,9 @@ public class AuthDal : IAuthDAL
             connection.Open();
 
             var sql = @"insert into AppUser(Email, Password, Salt, Status)
-                        values(@Email, @Password, @Salt, @Status)";
-            return await connection.ExecuteAsync(sql, new {model.Email, model.Password, model.Salt, model.Status});
+                        values(@Email, @Password, @Salt, @Status);
+                        select currval(pg_get_serial_sequence('AppUser', 'userid'));";
+            return await connection.QuerySingleAsync<int>(sql, model);
         }
     }
 }
