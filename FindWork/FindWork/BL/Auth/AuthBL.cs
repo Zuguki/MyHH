@@ -21,12 +21,25 @@ public class AuthBL : IAuthBL
 
     public async Task<int> CreateUser(UserModel model)
     {
-        var salt = Guid.NewGuid().ToByteArray();
+        var salt = Guid.NewGuid().ToString();
         model.Password = encrypt.HashPassword(model.Password, salt);
+        model.Salt = salt;
         
         var id = await authDal.CreateUser(model);
         LogIn(id);
         return id;
+    }
+
+    public async Task<int> Authenticate(string email, string password, bool rememberMe)
+    {
+        var user = await authDal.GetUser(email);
+        if (user.Password == encrypt.HashPassword(password, user.Salt))
+        {
+            LogIn(user.UserId ?? -1);
+            return user.UserId ?? -1;
+        }
+        
+        return -1;
     }
 
     public void LogIn(int id)

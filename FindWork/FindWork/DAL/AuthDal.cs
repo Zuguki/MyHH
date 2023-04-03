@@ -11,7 +11,7 @@ public class AuthDal : IAuthDAL
     {
         using (var connection = new NpgsqlConnection(DbHelper.ConnectionString))
         {
-            connection.Open();
+            await connection.OpenAsync();
             return await connection.QueryFirstOrDefaultAsync<UserModel>(@"
                 select UserId, Email, Password, Salt, Status
                 from AppUser
@@ -23,7 +23,7 @@ public class AuthDal : IAuthDAL
     {
         using (var connection = new NpgsqlConnection(DbHelper.ConnectionString))
         {
-            connection.Open();
+            await connection.OpenAsync();
             
             return await connection.QueryFirstOrDefaultAsync<UserModel>(@"
                 select UserId, Email, Password, Salt, Status
@@ -36,7 +36,7 @@ public class AuthDal : IAuthDAL
     {
         using (var connection = new NpgsqlConnection(DbHelper.ConnectionString))
         {
-            connection.Open();
+            await connection.OpenAsync();
 
             var sql = @"insert into AppUser(Email, Password, Salt, Status)
                         values(@Email, @Password, @Salt, @Status);
