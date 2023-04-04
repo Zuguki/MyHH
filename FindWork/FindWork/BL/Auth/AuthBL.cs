@@ -1,5 +1,7 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
+using FindWork.BL.Exceptions;
 using FindWork.DAL;
 using FindWork.DAL.Models;
 using Microsoft.AspNetCore.Http;
@@ -33,13 +35,19 @@ public class AuthBL : IAuthBL
     public async Task<int> Authenticate(string email, string password, bool rememberMe)
     {
         var user = await authDal.GetUser(email);
-        if (user.Password == encrypt.HashPassword(password, user.Salt))
+        if (user.UserId is not null && user.Password == encrypt.HashPassword(password, user.Salt))
         {
-            LogIn(user.UserId ?? -1);
-            return user.UserId ?? -1;
+            LogIn(user.UserId ?? 0);
+            return user.UserId ?? 0;
         }
-        
-        return -1;
+
+        throw new AuthorizeException();
+    }
+
+    public async Task<ValidationResult> ValidateEmail(string email)
+    {
+        var user = await authDal.GetUser(email);
+        return user.UserId is not null ? new ValidationResult("Email already exists") : null;
     }
 
     public void LogIn(int id)

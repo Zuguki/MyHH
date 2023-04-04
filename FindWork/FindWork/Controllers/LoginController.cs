@@ -27,8 +27,15 @@ public class LoginController : Controller
     {
         if (ModelState.IsValid)
         {
-            await authBl.Authenticate(model.Email!, model.Password!, model.RememberMe == true);
-            return Redirect("/");
+            try
+            {
+                await authBl.Authenticate(model.Email!, model.Password!, model.RememberMe == true);
+                return Redirect("/");
+            }
+            catch
+            {
+                ModelState.AddModelError("Email", "Name or Email is not valid");
+            }
         }
     
         return View("Index", model);

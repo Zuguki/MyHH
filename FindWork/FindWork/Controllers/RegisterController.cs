@@ -28,6 +28,15 @@ public class RegisterController : Controller
     {
         if (ModelState.IsValid)
         {
+            var validate = await authBl.ValidateEmail(model.Email ?? "");
+            if (validate is not null)
+            {
+                ModelState.TryAddModelError("Email", validate.ErrorMessage);
+            }
+        }
+
+        if (ModelState.IsValid)
+        {
             await authBl.CreateUser(AuthMapper.MapRegistrationViewModelToUserModel(model));
             return Redirect("/");
         }

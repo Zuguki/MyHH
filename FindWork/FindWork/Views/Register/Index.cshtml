@@ -9,10 +9,12 @@
         <p>
             <label>Email</label>
             <input name="Email" type="text" value="@Model.Email"/>
+            <div class="error">@Html.ValidationMessageFor(item => item.Email)</div>
         </p>
         <p>
             <label>Password</label>
             <input name="Password" type="password"/>
+            <div class="error">@Html.ValidationMessageFor(item => item.Password)</div>
         </p>
         
         <button>Sign In</button>
