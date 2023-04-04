@@ -1,0 +1,20 @@
+@model ProfileViewModel
+
+@{
+    ViewData["Title"] = "Profile";
+}
+
+<div>
+    <form action="/profile" method="post" enctype="multipart/form-data">
+        <p>
+            <label>Profile name</label>
+            <input name="Email" type="text" value="@Model.ProfileName"/>
+            <div class="error">@Html.ValidationMessageFor(m => m.ProfileName)</div>
+        </p>
+        <p>
+            <input type="file" name="file">
+        </p>
+
+        <button>Create</button>
+    </form>
+</div>
