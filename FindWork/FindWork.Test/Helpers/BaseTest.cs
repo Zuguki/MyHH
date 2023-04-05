@@ -9,10 +9,13 @@ public class BaseTest
     protected readonly IAuthDAL authDal = new AuthDal();
     protected readonly IHttpContextAccessor httpContextAccessor = new HttpContextAccessor();
     protected readonly IEncrypt encrypt = new Encrypt();
-    protected IAuthBL authBl;
+    protected readonly IDbSessionDAL sessionDal = new DbSessionDAL();
+    protected readonly IDbSession session;
+    protected IAuth Auth;
     
     public BaseTest()
     {
-        authBl = new AuthBL(authDal, encrypt, httpContextAccessor);
+        session = new DbSession(sessionDal, httpContextAccessor);
+        Auth = new Auth(authDal, encrypt, session);
     }
 }

@@ -1,19 +1,18 @@
-using Microsoft.AspNetCore.Http;
+using System.Threading.Tasks;
 
 namespace FindWork.BL.Auth;
 
 public class CurrentUser : ICurrentUser
 {
-    private readonly IHttpContextAccessor httpContext;
+    private readonly IDbSession dbSession;
 
-    public CurrentUser(IHttpContextAccessor httpContext)
+    public CurrentUser(IDbSession dbSession)
     {
-        this.httpContext = httpContext;
+        this.dbSession = dbSession;
     }
 
-    public bool IsLoggedIn()
+    public async Task<bool> IsLoggedIn()
     {
-        var id = httpContext.HttpContext?.Session.GetInt32(AuthConstants.AUTH_SESSION_PARAM_NAME);
-        return id != null;
+        return await dbSession.IsLoggedIn();
     }
 }

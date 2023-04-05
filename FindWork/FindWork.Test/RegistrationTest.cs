@@ -20,11 +20,11 @@ public class RegistrationTest : BaseTest
             var email = Guid.NewGuid() + "@test.com";
             
             // validate: user is not created
-            var validateEmailResult = await authBl.ValidateEmail(email);
+            var validateEmailResult = await Auth.ValidateEmail(email);
             validateEmailResult.Should().BeNull();
 
             // create user
-            var userId = await authBl.CreateUser(
+            var userId = await Auth.CreateUser(
                 new UserModel()
                 {
                     Email = email,
@@ -43,7 +43,7 @@ public class RegistrationTest : BaseTest
             
             
             // validate: user is created
-            validateEmailResult = await authBl.ValidateEmail(email);
+            validateEmailResult = await Auth.ValidateEmail(email);
             validateEmailResult.Should().NotBeNull();
 
             encrypt.HashPassword("Some123Password#", userDalByEmail.Salt).Should()

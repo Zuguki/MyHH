@@ -8,11 +8,11 @@ namespace FindWork.Controllers;
 
 public class RegisterController : Controller
 {
-    private readonly IAuthBL authBl;
+    private readonly IAuth _auth;
 
-    public RegisterController(IAuthBL authBl)
+    public RegisterController(IAuth auth)
     {
-        this.authBl = authBl;
+        this._auth = auth;
     }
 
     [HttpGet]
@@ -28,7 +28,7 @@ public class RegisterController : Controller
     {
         if (ModelState.IsValid)
         {
-            var validate = await authBl.ValidateEmail(model.Email ?? "");
+            var validate = await _auth.ValidateEmail(model.Email ?? "");
             if (validate is not null)
             {
                 ModelState.TryAddModelError("Email", validate.ErrorMessage);
@@ -37,7 +37,7 @@ public class RegisterController : Controller
 
         if (ModelState.IsValid)
         {
-            await authBl.CreateUser(AuthMapper.MapRegistrationViewModelToUserModel(model));
+            await _auth.CreateUser(AuthMapper.MapRegistrationViewModelToUserModel(model));
             return Redirect("/");
         }
 

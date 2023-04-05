@@ -8,17 +8,17 @@ using Microsoft.AspNetCore.Http;
 
 namespace FindWork.BL.Auth;
 
-public class AuthBL : IAuthBL
+public class Auth : IAuth
 {
     private readonly IAuthDAL authDal;
     private readonly IEncrypt encrypt;
-    private readonly IHttpContextAccessor httpContext;
-    
-    public AuthBL(IAuthDAL authDal, IEncrypt encrypt, IHttpContextAccessor httpContext)
+    private readonly IDbSession dbSession;
+
+    public Auth(IAuthDAL authDal, IEncrypt encrypt, IDbSession dbSession)
     {
         this.authDal = authDal;
         this.encrypt = encrypt;
-        this.httpContext = httpContext;
+        this.dbSession = dbSession;
     }
 
     public async Task<int> CreateUser(UserModel model)
@@ -28,7 +28,7 @@ public class AuthBL : IAuthBL
         model.Salt = salt;
         
         var id = await authDal.CreateUser(model);
-        LogIn(id);
+        await LogIn(id);
         return id;
     }
 
@@ -37,21 +37,23 @@ public class AuthBL : IAuthBL
         var user = await authDal.GetUser(email);
         if (user.UserId is not null && user.Password == encrypt.HashPassword(password, user.Salt))
         {
-            LogIn(user.UserId ?? 0);
+            await LogIn(user.UserId ?? 0);
             return user.UserId ?? 0;
         }
 
         throw new AuthorizeException();
     }
 
-    public async Task<ValidationResult> ValidateEmail(string email)
+    public async Task<ValidationResult?> ValidateEmail(string email)
     {
         var user = await authDal.GetUser(email);
-        return user.UserId is not null ? new ValidationResult("Email already exists") : null;
+        return user.UserId is not null 
+            ? new ValidationResult("Email already exists") 
+            : null;
     }
 
-    public void LogIn(int id)
+    public async Task LogIn(int id)
     {
-        httpContext.HttpContext?.Session.SetInt32(AuthConstants.AUTH_SESSION_PARAM_NAME, id);
+        await dbSession.SetUserId(id);
     }
 }

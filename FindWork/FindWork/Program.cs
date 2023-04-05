@@ -1,3 +1,5 @@
+using FindWork.BL.Auth;
+using FindWork.DAL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,14 +9,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddSingleton<FindWork.BL.Auth.IAuthBL, FindWork.BL.Auth.AuthBL>();
-builder.Services.AddSingleton<FindWork.BL.Auth.IEncrypt, FindWork.BL.Auth.Encrypt>();
+builder.Services.AddScoped<IAuth, Auth>();
+builder.Services.AddSingleton<IEncrypt, Encrypt>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-builder.Services.AddScoped<FindWork.BL.Auth.ICurrentUser, FindWork.BL.Auth.CurrentUser>();
-builder.Services.AddSingleton<FindWork.DAL.IAuthDAL, FindWork.DAL.AuthDal>();
+builder.Services.AddScoped<ICurrentUser, CurrentUser>();
+builder.Services.AddSingleton<IAuthDAL, AuthDal>();
+builder.Services.AddSingleton<IDbSessionDAL, DbSessionDAL>();
+builder.Services.AddScoped<IDbSession, DbSession>();
 
-builder.Services.AddMvc().AddSessionStateTempDataProvider();
-builder.Services.AddSession();
+builder.Services.AddMvc();
 
 var app = builder.Build();
 
@@ -28,7 +31,6 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
-app.UseSession();
 
 app.UseAuthorization();
 

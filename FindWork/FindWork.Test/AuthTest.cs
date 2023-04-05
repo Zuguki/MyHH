@@ -19,7 +19,7 @@ public class AuthTest : BaseTest
         {
             var email = Guid.NewGuid() + "@test.com";
 
-            var userId = await authBl.CreateUser(
+            var userId = await Auth.CreateUser(
                 new UserModel()
                 {
                     Email = email,
@@ -28,15 +28,15 @@ public class AuthTest : BaseTest
 
             var invalidEmailAndPassword = () =>
             {
-                authBl.Authenticate("sese", "fdas", false).GetAwaiter().GetResult();
+                Auth.Authenticate("sese", "fdas", false).GetAwaiter().GetResult();
             };
             var invalidEmail = () =>
             {
-                authBl.Authenticate("sese", "Some123Password#", false).GetAwaiter().GetResult();
+                Auth.Authenticate("sese", "Some123Password#", false).GetAwaiter().GetResult();
             };
             var invalidPassword = () =>
             {
-                authBl.Authenticate(email, "fdas", false).GetAwaiter().GetResult();
+                Auth.Authenticate(email, "fdas", false).GetAwaiter().GetResult();
             };
             
             invalidEmailAndPassword.Should().Throw<AuthorizeException>();
@@ -44,7 +44,7 @@ public class AuthTest : BaseTest
             invalidPassword.Should().Throw<AuthorizeException>();
             
             // correct
-            await authBl.Authenticate(email, "Some123Password#", false);
+            await Auth.Authenticate(email, "Some123Password#", false);
         }
     }
 }
