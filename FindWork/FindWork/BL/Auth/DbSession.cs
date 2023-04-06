@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using FindWork.BL.General;
 using FindWork.DAL;
 using FindWork.DAL.Models;
 using Microsoft.AspNetCore.Http;
@@ -10,13 +11,13 @@ namespace FindWork.BL.Auth;
 public class DbSession : IDbSession
 {
     private readonly IDbSessionDAL sessionDal;
-    private readonly IHttpContextAccessor httpContextAccessor;
     private SessionModel? sessionModel = null;
+    private readonly IWebCookie webCookie;
 
-    public DbSession(IDbSessionDAL sessionDal, IHttpContextAccessor httpContextAccessor)
+    public DbSession(IDbSessionDAL sessionDal, IWebCookie cookie)
     {
         this.sessionDal = sessionDal;
-        this.httpContextAccessor = httpContextAccessor;
+        webCookie = cookie;
     }
 
     public async Task<SessionModel> GetSession()
@@ -25,10 +26,10 @@ public class DbSession : IDbSession
             return sessionModel;
 
         SessionModel? session = null;
-        var cookie = httpContextAccessor.HttpContext?.Request.Cookies.FirstOrDefault();
-        if (cookie is not null && !string.IsNullOrEmpty(cookie.Value.Value))
-        { 
-            var sessionId = Guid.Parse(cookie.Value.Value);
+        var cookieValue = webCookie.Get(AuthConstants.SessionCookieName);
+        if (cookieValue is not null)
+        {
+            var sessionId = Guid.Parse(cookieValue);
             session = await sessionDal.Get(sessionId);
         }
 
@@ -85,13 +86,7 @@ public class DbSession : IDbSession
     
     private void CreateSessionCookie(Guid sessionId)
     {
-        var option = new CookieOptions
-        {
-            Path = "/",
-            HttpOnly = true,
-            Secure = true
-        };
-        httpContextAccessor.HttpContext?.Response.Cookies.Delete(AuthConstants.SessionCookieName);
-        httpContextAccessor.HttpContext?.Response.Cookies.Append(AuthConstants.SessionCookieName, sessionId.ToString(), option);
+        webCookie.Delete(AuthConstants.SessionCookieName);
+        webCookie.AddSecure(AuthConstants.SessionCookieName, sessionId.ToString());
     }
 }

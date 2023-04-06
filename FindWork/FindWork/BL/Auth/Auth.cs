@@ -36,13 +36,11 @@ public class Auth : IAuth
     public async Task<int> Authenticate(string email, string password, bool rememberMe)
     {
         var user = await authDal.GetUser(email);
-        if (user.UserId is not null && user.Password == encrypt.HashPassword(password, user.Salt))
-        {
-            await LogIn(user.UserId ?? 0);
-            return user.UserId ?? 0;
-        }
-
-        throw new AuthorizeException();
+        if (user.UserId is null || user.Password != encrypt.HashPassword(password, user.Salt))
+            throw new AuthorizeException();
+        
+        await LogIn(user.UserId ?? 0);
+        return user.UserId ?? 0;
     }
 
     public async Task ValidateEmail(string email)

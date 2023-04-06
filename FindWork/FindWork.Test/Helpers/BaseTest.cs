@@ -1,4 +1,5 @@
 using FindWork.BL.Auth;
+using FindWork.BL.General;
 using FindWork.DAL;
 using Microsoft.AspNetCore.Http;
 
@@ -11,11 +12,12 @@ public class BaseTest
     protected readonly IEncrypt encrypt = new Encrypt();
     protected readonly IDbSessionDAL sessionDal = new DbSessionDAL();
     protected readonly IDbSession session;
+    protected readonly IWebCookie webCookie = new TestWebCookie();
     protected IAuth Auth;
     
     public BaseTest()
     {
-        session = new DbSession(sessionDal, httpContextAccessor);
+        session = new DbSession(sessionDal, webCookie);
         Auth = new Auth(authDal, encrypt, session);
     }
 }
