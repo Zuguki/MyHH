@@ -16,6 +16,9 @@
             <input name="Password" type="password"/>
             <div class="error">@Html.ValidationMessageFor(m => m.Password)</div>
         </p>
+        <p>
+            <input name="RememberMe" type="checkbox" value="true" /> Remember Me
+        </p>
 
         <button>Log In</button>
     </form>

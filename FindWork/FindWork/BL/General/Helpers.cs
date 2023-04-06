@@ -11,6 +11,13 @@ public static class Helpers
             ? value 
             : def;
     }
+
+    public static Guid? StringToGuidDef(string str, Guid? def = null)
+    {
+        return Guid.TryParse(str, out var value) 
+            ? value 
+            : def;
+    }
     
     public static TransactionScope CreateTransactionScope(int seconds = 600)
     {

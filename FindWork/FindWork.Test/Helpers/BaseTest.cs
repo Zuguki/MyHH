@@ -13,11 +13,12 @@ public class BaseTest
     protected readonly IDbSessionDAL sessionDal = new DbSessionDAL();
     protected readonly IDbSession session;
     protected readonly IWebCookie webCookie = new TestWebCookie();
+    protected readonly IUserTokenDAL userTokenDal = new UserTokenDAL();
     protected IAuth Auth;
     
     public BaseTest()
     {
         session = new DbSession(sessionDal, webCookie);
-        Auth = new Auth(authDal, encrypt, session);
+        Auth = new Auth(authDal, encrypt, session, userTokenDal, webCookie);
     }
 }

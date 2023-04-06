@@ -14,12 +14,16 @@ public class Auth : IAuth
     private readonly IAuthDAL authDal;
     private readonly IEncrypt encrypt;
     private readonly IDbSession dbSession;
+    private readonly IUserTokenDAL userToken;
+    private readonly IWebCookie webCookie;
 
-    public Auth(IAuthDAL authDal, IEncrypt encrypt, IDbSession dbSession)
+    public Auth(IAuthDAL authDal, IEncrypt encrypt, IDbSession dbSession, IUserTokenDAL userToken, IWebCookie webCookie)
     {
         this.authDal = authDal;
         this.encrypt = encrypt;
         this.dbSession = dbSession;
+        this.userToken = userToken;
+        this.webCookie = webCookie;
     }
 
     public async Task<int> CreateUser(UserModel model)
@@ -40,6 +44,11 @@ public class Auth : IAuth
             throw new AuthorizeException();
         
         await LogIn(user.UserId ?? 0);
+        if (rememberMe)
+        {
+            var tokenId = await userToken.Create(user.UserId ?? 0);
+            webCookie.AddSecure(AuthConstants.RememberMeCookieName, tokenId.ToString(), 30);
+        }
         return user.UserId ?? 0;
     }
 

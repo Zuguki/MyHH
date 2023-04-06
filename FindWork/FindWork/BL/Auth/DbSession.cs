@@ -1,10 +1,8 @@
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 using FindWork.BL.General;
 using FindWork.DAL;
 using FindWork.DAL.Models;
-using Microsoft.AspNetCore.Http;
 
 namespace FindWork.BL.Auth;
 

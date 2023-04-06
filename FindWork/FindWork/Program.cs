@@ -1,4 +1,5 @@
 using FindWork.BL.Auth;
+using FindWork.BL.General;
 using FindWork.DAL;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -16,6 +17,8 @@ builder.Services.AddScoped<ICurrentUser, CurrentUser>();
 builder.Services.AddSingleton<IAuthDAL, AuthDal>();
 builder.Services.AddSingleton<IDbSessionDAL, DbSessionDAL>();
 builder.Services.AddScoped<IDbSession, DbSession>();
+builder.Services.AddSingleton<IUserTokenDAL, UserTokenDAL>();
+builder.Services.AddSingleton<IWebCookie, WebCookie>();
 
 builder.Services.AddMvc();
 
