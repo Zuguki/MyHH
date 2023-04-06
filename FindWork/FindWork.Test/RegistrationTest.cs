@@ -1,4 +1,5 @@
 using System.Transactions;
+using FindWork.BL.Exceptions;
 using FindWork.DAL.Models;
 using FindWork.Test.Helpers;
 using FluentAssertions;
@@ -20,8 +21,11 @@ public class RegistrationTest : BaseTest
             var email = Guid.NewGuid() + "@test.com";
             
             // validate: user is not created
-            var validateEmailResult = await Auth.ValidateEmail(email);
-            validateEmailResult.Should().BeNull();
+            var act = () =>
+            {
+                Auth.ValidateEmail(email).GetAwaiter().GetResult();
+            };
+            act.Should().NotThrow<DuplicateEmailException>();
 
             // create user
             var userId = await Auth.CreateUser(
@@ -43,8 +47,11 @@ public class RegistrationTest : BaseTest
             
             
             // validate: user is created
-            validateEmailResult = await Auth.ValidateEmail(email);
-            validateEmailResult.Should().NotBeNull();
+            act = () =>
+            {
+                Auth.ValidateEmail(email).GetAwaiter().GetResult();
+            };
+            act.Should().Throw<DuplicateEmailException>();
 
             encrypt.HashPassword("Some123Password#", userDalByEmail.Salt).Should()
                 .BeEquivalentTo(userDalByEmail.Password);

@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using FindWork.BL.Auth;
+using FindWork.BL.Exceptions;
 using FindWork.ViewMapper;
 using FindWork.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -28,17 +29,15 @@ public class RegisterController : Controller
     {
         if (ModelState.IsValid)
         {
-            var validate = await _auth.ValidateEmail(model.Email ?? "");
-            if (validate is not null)
+            try
             {
-                ModelState.TryAddModelError("Email", validate.ErrorMessage);
+                await _auth.Register(AuthMapper.MapRegistrationViewModelToUserModel(model));
+                return Redirect("/");
             }
-        }
-
-        if (ModelState.IsValid)
-        {
-            await _auth.CreateUser(AuthMapper.MapRegistrationViewModelToUserModel(model));
-            return Redirect("/");
+            catch (DuplicateEmailException)
+            {
+                ModelState.TryAddModelError("Email", "Email was duplicated");
+            }
         }
 
         return View("Index", model);

@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using FindWork.BL.Exceptions;
+using FindWork.BL.General;
 using FindWork.DAL;
 using FindWork.DAL.Models;
 using Microsoft.AspNetCore.Http;
@@ -44,12 +45,22 @@ public class Auth : IAuth
         throw new AuthorizeException();
     }
 
-    public async Task<ValidationResult?> ValidateEmail(string email)
+    public async Task ValidateEmail(string email)
     {
         var user = await authDal.GetUser(email);
-        return user.UserId is not null 
-            ? new ValidationResult("Email already exists") 
-            : null;
+        if (user.UserId is not null)
+            throw new DuplicateEmailException();
+    }
+    
+    public async Task Register(UserModel model)
+    {
+        using (var scope = Helpers.CreateTransactionScope(600))
+        {
+            await dbSession.Lock();
+            await ValidateEmail(model.Email);
+            await CreateUser(model);
+            scope.Complete();
+        }
     }
 
     public async Task LogIn(int id)
