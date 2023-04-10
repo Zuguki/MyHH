@@ -1,9 +1,6 @@
-using System;
-using System.IO;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 using FindWork.Middleware;
+using FindWork.Service;
 using FindWork.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,18 +23,8 @@ public class ProfileController : Controller
     {
         var imageData = Request.Form.Files[0];
         {
-            var md5Hash = MD5.Create();
-            var inputBytes = Encoding.ASCII.GetBytes(imageData.FileName);
-            var hashBytes = md5Hash.ComputeHash(inputBytes);
-
-            var hash = Convert.ToHexString(hashBytes);
-            var dir = "./wwwroot/images/" + hash[..2] + "/" + hash[..4];
-            if (!Directory.Exists(dir))
-                Directory.CreateDirectory(dir);
-
-            var fileName = dir + "/" + imageData.FileName;
-            using var stream = System.IO.File.Create(fileName);
-            await imageData.CopyToAsync(stream);
+            var fileName = WebFileWorker.GetWebFileName(imageData.FileName);
+            await WebFileWorker.UploadAndResizeImage(imageData.OpenReadStream(), fileName, 800, 600);
         }
 
         return View("Index", new ProfileViewModel());
