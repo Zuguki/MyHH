@@ -1,10 +1,12 @@
 using System.Threading.Tasks;
 using FindWork.BL.Auth;
+using FindWork.Middleware;
 using FindWork.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FindWork.Controllers;
 
+[SiteNotAuthorize]
 public class LoginController : Controller
 {
     private readonly IAuth auth;

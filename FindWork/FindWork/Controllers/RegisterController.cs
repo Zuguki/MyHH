@@ -1,12 +1,14 @@
 using System.Threading.Tasks;
 using FindWork.BL.Auth;
 using FindWork.BL.Exceptions;
+using FindWork.Middleware;
 using FindWork.ViewMapper;
 using FindWork.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FindWork.Controllers;
 
+[SiteNotAuthorize]
 public class RegisterController : Controller
 {
     private readonly IAuth _auth;

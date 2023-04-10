@@ -3,11 +3,13 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using FindWork.Middleware;
 using FindWork.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FindWork.Controllers;
 
+[SiteAuthorize]
 public class ProfileController : Controller
 {
     [HttpGet]
