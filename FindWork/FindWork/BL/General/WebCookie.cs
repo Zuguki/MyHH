@@ -7,6 +7,7 @@ namespace FindWork.BL.General;
 public class WebCookie : IWebCookie
 {
     private readonly IHttpContextAccessor httpContextAccessor;
+    private const int DefaultExpireMinutes = 15;
 
     public WebCookie(IHttpContextAccessor httpContextAccessor)
     {
@@ -19,8 +20,9 @@ public class WebCookie : IWebCookie
         options.Path = "/";
         options.HttpOnly = true;
         options.Secure = true;
-        if (days > 0)
-            options.Expires = DateTimeOffset.UtcNow.AddDays(days);
+        options.Expires = days > 0
+            ? DateTimeOffset.UtcNow.AddDays(days)
+            : DateTimeOffset.UtcNow.AddMinutes(DefaultExpireMinutes);
 
         httpContextAccessor.HttpContext?.Response.Cookies.Append(cookieName, value, options);
     }
@@ -29,8 +31,9 @@ public class WebCookie : IWebCookie
     {
         var options = new CookieOptions();
         options.Path = "/";
-        if (days > 0)
-            options.Expires = DateTimeOffset.UtcNow.AddDays(days);
+        options.Expires = days > 0
+            ? DateTimeOffset.UtcNow.AddDays(days)
+            : DateTimeOffset.UtcNow.AddMinutes(DefaultExpireMinutes);
 
         httpContextAccessor.HttpContext?.Response.Cookies.Append(cookieName, value, options);
     }

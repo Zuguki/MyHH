@@ -7,11 +7,11 @@ namespace FindWork.Controllers;
 
 public class LoginController : Controller
 {
-    private readonly IAuth _auth;
+    private readonly IAuth auth;
     
     public LoginController(IAuth auth)
     {
-        this._auth = auth;
+        this.auth = auth;
     }
     
     [HttpGet]
@@ -30,7 +30,7 @@ public class LoginController : Controller
         {
             try
             {
-                await _auth.Authenticate(model.Email!, model.Password!, model.RememberMe == true);
+                await auth.Authenticate(model.Email!, model.Password!, model.RememberMe == true);
                 return Redirect("/");
             }
             catch
