@@ -19,6 +19,7 @@ public class ProfileController : Controller
     
     [HttpPost]
     [Route("/profile")]
+    [AutoValidateAntiforgeryToken]
     public async Task<IActionResult> IndexSave()
     {
         var imageData = Request.Form.Files[0];

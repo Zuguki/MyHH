@@ -6,6 +6,7 @@
 
 <div>
     <form action="/register" method="post">
+        @Html.AntiForgeryToken()
         <p>
             <label>Email</label>
             <input name="Email" type="text" value="@Model.Email"/>
@@ -16,7 +17,7 @@
             <input name="Password" type="password"/>
             <div class="error">@Html.ValidationMessageFor(item => item.Password)</div>
         </p>
-        
+
         <button>Sign In</button>
     </form>
 </div>

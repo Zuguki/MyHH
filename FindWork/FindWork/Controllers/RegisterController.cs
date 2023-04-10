@@ -13,7 +13,7 @@ public class RegisterController : Controller
 
     public RegisterController(IAuth auth)
     {
-        this._auth = auth;
+        _auth = auth;
     }
 
     [HttpGet]
@@ -25,6 +25,7 @@ public class RegisterController : Controller
 
     [HttpPost]
     [Route("/register")]
+    [AutoValidateAntiforgeryToken]
     public async Task<IActionResult> IndexSave(RegisterViewModel model)
     {
         if (ModelState.IsValid)
