@@ -23,6 +23,7 @@ public class LoginController : Controller
     
     [HttpPost]
     [Route("/login")]
+    [AutoValidateAntiforgeryToken]
     public async Task<IActionResult> IndexSave(LoginViewModel model)
     {
         if (ModelState.IsValid)

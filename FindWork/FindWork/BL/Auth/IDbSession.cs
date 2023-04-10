@@ -12,5 +12,8 @@ public interface IDbSession
     Task<int?> GetUserId();
     
     Task<bool> IsLoggedIn();
+    
     Task Lock();
+
+    void ResetSessionCache();
 }

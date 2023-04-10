@@ -14,7 +14,7 @@ public class RegistrationTest : BaseTest
     }
 
     [Test]
-    public async Task Test1()
+    public async Task RegisterTest()
     {
         using (var scope = Helper.CreateTransactionScope())
         {
@@ -23,12 +23,12 @@ public class RegistrationTest : BaseTest
             // validate: user is not created
             var act = () =>
             {
-                Auth.ValidateEmail(email).GetAwaiter().GetResult();
+                auth.ValidateEmail(email).GetAwaiter().GetResult();
             };
             act.Should().NotThrow<DuplicateEmailException>();
 
             // create user
-            var userId = await Auth.CreateUser(
+            var userId = await auth.CreateUser(
                 new UserModel()
                 {
                     Email = email,
@@ -49,7 +49,7 @@ public class RegistrationTest : BaseTest
             // validate: user is created
             act = () =>
             {
-                Auth.ValidateEmail(email).GetAwaiter().GetResult();
+                auth.ValidateEmail(email).GetAwaiter().GetResult();
             };
             act.Should().Throw<DuplicateEmailException>();
 

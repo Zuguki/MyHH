@@ -69,6 +69,11 @@ public class DbSession : IDbSession
         await sessionDal.Lock(data.DbSessionId);
     }
 
+    public void ResetSessionCache()
+    {
+        sessionModel = null;
+    }
+
     private async Task<SessionModel> CreateSession()
     {
         var session = new SessionModel()

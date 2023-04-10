@@ -1,11 +1,9 @@
 using System;
-using System.ComponentModel.DataAnnotations;
 using System.Threading.Tasks;
 using FindWork.BL.Exceptions;
 using FindWork.BL.General;
 using FindWork.DAL;
 using FindWork.DAL.Models;
-using Microsoft.AspNetCore.Http;
 
 namespace FindWork.BL.Auth;
 
@@ -61,7 +59,7 @@ public class Auth : IAuth
     
     public async Task Register(UserModel model)
     {
-        using (var scope = Helpers.CreateTransactionScope(600))
+        using (var scope = Helpers.CreateTransactionScope(5))
         {
             await dbSession.Lock();
             await ValidateEmail(model.Email);

@@ -6,7 +6,7 @@ namespace FindWork.Test;
 public class SessionTest : BaseTest
 {
     [Test]
-    public async Task Test1()
+    public async Task SessionChecker()
     {
         using (var scope = Helper.CreateTransactionScope())
         {
