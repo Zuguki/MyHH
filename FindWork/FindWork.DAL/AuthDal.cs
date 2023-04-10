@@ -1,8 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
-using Dapper;
 using FindWork.DAL.Models;
-using Npgsql;
 
 namespace FindWork.DAL;
 

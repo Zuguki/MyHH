@@ -4,6 +4,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FindWork", "FindWork\FindWo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FindWork.Test", "FindWork.Test\FindWork.Test.csproj", "{A2C28FAE-548C-42F3-BE31-F8477A59899A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FindWork.BL", "FindWork.BL\FindWork.BL.csproj", "{057C8EBB-2A20-412C-A7AD-132EAB3C21C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FindWork.DAL", "FindWork.DAL\FindWork.DAL.csproj", "{32D4C549-FD0D-4DB2-9B46-4B9B9C1ABA3D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +22,13 @@ Global
 		{A2C28FAE-548C-42F3-BE31-F8477A59899A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A2C28FAE-548C-42F3-BE31-F8477A59899A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A2C28FAE-548C-42F3-BE31-F8477A59899A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{057C8EBB-2A20-412C-A7AD-132EAB3C21C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{057C8EBB-2A20-412C-A7AD-132EAB3C21C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{057C8EBB-2A20-412C-A7AD-132EAB3C21C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{057C8EBB-2A20-412C-A7AD-132EAB3C21C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32D4C549-FD0D-4DB2-9B46-4B9B9C1ABA3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32D4C549-FD0D-4DB2-9B46-4B9B9C1ABA3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32D4C549-FD0D-4DB2-9B46-4B9B9C1ABA3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32D4C549-FD0D-4DB2-9B46-4B9B9C1ABA3D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
