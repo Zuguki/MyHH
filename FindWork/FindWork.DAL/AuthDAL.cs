@@ -4,7 +4,7 @@ using FindWork.DAL.Models;
 
 namespace FindWork.DAL;
 
-public class AuthDal : IAuthDAL
+public class AuthDAL : IAuthDAL
 {
     public async Task<UserModel> GetUser(int id)
     {

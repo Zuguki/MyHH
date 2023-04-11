@@ -14,7 +14,7 @@ builder.Services.AddScoped<IAuth, Auth>();
 builder.Services.AddSingleton<IEncrypt, Encrypt>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<ICurrentUser, CurrentUser>();
-builder.Services.AddSingleton<IAuthDAL, AuthDal>();
+builder.Services.AddSingleton<IAuthDAL, AuthDAL>();
 builder.Services.AddSingleton<IDbSessionDAL, DbSessionDAL>();
 builder.Services.AddScoped<IDbSession, DbSession>();
 builder.Services.AddSingleton<IUserTokenDAL, UserTokenDAL>();
