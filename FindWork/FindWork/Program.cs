@@ -1,6 +1,8 @@
 using FindWork.BL.Auth;
 using FindWork.BL.General;
+using FindWork.BL.Profile;
 using FindWork.DAL;
+using FindWork.DAL.Profile;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,15 +12,18 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddSingleton<IAuthDAL, AuthDAL>();
+builder.Services.AddSingleton<IUserTokenDAL, UserTokenDAL>();
+builder.Services.AddSingleton<IDbSessionDAL, DbSessionDAL>();
+builder.Services.AddSingleton<IProfileDAL, ProfileDAL>();
+
 builder.Services.AddScoped<IAuth, Auth>();
 builder.Services.AddSingleton<IEncrypt, Encrypt>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<ICurrentUser, CurrentUser>();
-builder.Services.AddSingleton<IAuthDAL, AuthDAL>();
-builder.Services.AddSingleton<IDbSessionDAL, DbSessionDAL>();
 builder.Services.AddScoped<IDbSession, DbSession>();
-builder.Services.AddSingleton<IUserTokenDAL, UserTokenDAL>();
 builder.Services.AddSingleton<IWebCookie, WebCookie>();
+builder.Services.AddSingleton<IProfile, Profile>();
 
 builder.Services.AddMvc();
 

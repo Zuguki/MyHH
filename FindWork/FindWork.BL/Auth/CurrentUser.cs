@@ -34,6 +34,9 @@ public class CurrentUser : ICurrentUser
         return isLoggedIn;
     }
 
+    public async Task<int?> GetUserId() =>
+        await dbSession.GetUserId();
+
     private async Task<int?> GetUserIdByToken()
     {
         var cookie = webCookie.Get(AuthConstants.RememberMeCookieName);

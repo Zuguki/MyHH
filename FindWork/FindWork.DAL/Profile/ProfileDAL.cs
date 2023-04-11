@@ -13,7 +13,7 @@ public class ProfileDAL : IProfileDAL
                     from Profile
                     where UserId = @id";
         
-        return await DbHelper.QueryAsync<ProfileModel>(sql, userId);
+        return await DbHelper.QueryAsync<ProfileModel>(sql, new {id = userId});
     }
 
     public async Task<int> Add(ProfileModel model)
