@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace FindWork.DAL;
@@ -22,8 +21,6 @@ public class UserTokenDAL : IUserTokenDAL
                     from UserToken
                     where UserTokenId = @tokenId";
 
-        var res = await DbHelper.QueryAsync<int>(sql, new {tokenId = tokenId});
-
-        return res.FirstOrDefault();
+        return await DbHelper.ExecuteScalarAsync(sql, new {tokenId = tokenId});
     }
 }

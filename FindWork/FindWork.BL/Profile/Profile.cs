@@ -14,18 +14,16 @@ public class Profile : IProfile
         this.profileDal = profileDal;
     }
 
-    public async Task<int> Add(ProfileModel model)
-    {
-        return await profileDal.Add(model);
-    }
-
     public async Task<IEnumerable<ProfileModel>> Get(int userId)
     {
         return await profileDal.Get(userId);
     }
 
-    public async Task Update(ProfileModel model)
+    public async Task AddOrUpdate(ProfileModel model)
     {
-        await profileDal.Update(model);
+        if (model.ProfileId is null)
+            await profileDal.Add(model);
+        else
+            await profileDal.Update(model);
     }
 }

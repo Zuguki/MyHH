@@ -2,7 +2,7 @@ namespace FindWork.DAL.Models;
 
 public class ProfileModel
 {
-    public int ProfileId { get; set; }
+    public int? ProfileId { get; set; }
     public int UserId { get; set; }
     public string? ProfileName { get; set; }
     public string? FirstName { get; set; }

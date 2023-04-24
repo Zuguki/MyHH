@@ -27,20 +27,13 @@ public class ProfileController : Controller
     [Route("/profile")]
     public async Task<IActionResult> Index()
     {
-        var userId = await currentUser.GetUserId();
+        var profiles = await currentUser.GetProfiles();
+        var profileModel = profiles.FirstOrDefault();
 
-        if (userId is null)
-            ModelState.TryAddModelError("Id", "User not authorized");
-
-        if (!ModelState.IsValid)
-            return View("Index", new ProfileViewModel());
+        var viewModel = profileModel is null 
+            ? new ProfileViewModel() 
+            : ProfileMapper.MapProfileModelToProfileViewModel(profileModel);
         
-        var profiles = await profile.Get((int) userId!);
-        var currentProfile = profiles.FirstOrDefault();
-        if (currentProfile is null)
-            return View("Index", new ProfileViewModel());
-
-        var viewModel = ProfileMapper.MapProfileModelToProfileViewModel(currentProfile);
         return View("Index", viewModel);
     }
     
@@ -49,20 +42,29 @@ public class ProfileController : Controller
     [AutoValidateAntiforgeryToken]
     public async Task<IActionResult> IndexSave(ProfileViewModel model)
     {
-        if (!ModelState.IsValid)
-            throw new Exception("Model uncorrect");
+        var userId = await currentUser.GetUserId();
+        if (userId is null)
+            throw new Exception("User is not found");
 
-        var imageData = Request.Form.Files[0];
+        var profiles = await profile.Get((int) userId);
+        if (model.ProfileId is not null && profiles.All(m => m.ProfileId != model.ProfileId))
+            throw new Exception("Error");
+
+        if (ModelState.IsValid)
         {
-            var fileName = WebFileWorker.GetWebFileName(imageData.FileName);
-            await WebFileWorker.UploadAndResizeImage(imageData.OpenReadStream(), fileName, 800, 600);
+            var profileModel = ProfileMapper.MapProfileViewModelToProfileModel(model);
+            profileModel.UserId = (int) userId;
+            if (Request.Form.Files.Count > 0)
+            {
+                var fileName = WebFileWorker.GetWebFileName(Request.Form.Files[0].FileName);
+                await WebFileWorker.UploadAndResizeImage(Request.Form.Files[0].OpenReadStream(), fileName, 800, 600);
+                profileModel.ProfileImage = fileName;
+            }
+            
+            await profile.AddOrUpdate(profileModel);
+            return Redirect("/");
         }
-        
-        var profileModel = ProfileMapper.MapProfileViewModelToProfileModel(model);
-        profileModel.UserId = (int) (await currentUser.GetUserId())!;
-        var profileId = await profile.Add(profileModel);
 
-        // return View("Index", new ProfileViewModel());
-        return Redirect("/");
+        return View("Index", new ProfileViewModel());
     }
 }

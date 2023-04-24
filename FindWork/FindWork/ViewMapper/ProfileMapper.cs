@@ -9,6 +9,7 @@ public class ProfileMapper
     {
         return new ProfileModel
         {
+            ProfileId = model.ProfileId,
             ProfileName = model.ProfileName,
             FirstName = model.FirstName,
             LastName = model.LastName

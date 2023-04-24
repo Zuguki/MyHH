@@ -1,6 +1,7 @@
 using FindWork.BL.Auth;
 using FindWork.BL.General;
 using FindWork.DAL;
+using FindWork.DAL.Profile;
 using Microsoft.AspNetCore.Http;
 
 namespace FindWork.Test.Helpers;
@@ -14,6 +15,7 @@ public class BaseTest
     protected readonly IDbSession session;
     protected readonly IWebCookie webCookie = new TestWebCookie();
     protected readonly IUserTokenDAL userTokenDal = new UserTokenDAL();
+    protected readonly IProfileDAL profileDal = new ProfileDAL();
     protected IAuth auth;
     protected ICurrentUser currentUser;
     
@@ -21,6 +23,6 @@ public class BaseTest
     {
         session = new DbSession(sessionDal, webCookie);
         auth = new Auth(authDal, encrypt, session, userTokenDal, webCookie);
-        currentUser = new CurrentUser(session, webCookie, userTokenDal);
+        currentUser = new CurrentUser(session, webCookie, userTokenDal, profileDal);
     }
 }

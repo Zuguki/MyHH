@@ -14,9 +14,7 @@ public static class DbHelper
         using (var connection = new NpgsqlConnection(ConnectionString))
         {
             await connection.OpenAsync();
-            var res = await connection.ExecuteAsync(sql, model);
-
-            return res;
+            return await connection.QueryFirstOrDefaultAsync<int>(sql, model);
         }
     }
 

@@ -21,4 +21,9 @@
       <ProjectReference Include="..\FindWork.DAL\FindWork.DAL.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\images\02\02B0\WorkSpase.jpeg" />
+      <_ContentIncludedByDefault Remove="wwwroot\images\FD\FD69\BackGround.jpeg" />
+    </ItemGroup>
+
 </Project>

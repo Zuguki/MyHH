@@ -22,7 +22,7 @@ public static class WebFileWorker
     {
         using var image = await Image.LoadAsync(fileStream);
         
-        if (image.Width / (image.Height / newHeight) > newWidth)
+        if (image.Width / (image.Height / (float) newHeight) > newWidth)
             newHeight = (int) (image.Height / (image.Width / (float) newWidth));
         else
             newWidth = (int) (image.Width / (image.Height / (float) newHeight));
