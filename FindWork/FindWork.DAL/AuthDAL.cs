@@ -28,7 +28,6 @@ public class AuthDAL : IAuthDAL
     {
         var sql = @"insert into AppUser(Email, Password, Salt, Status)
                     values(@Email, @Password, @Salt, @Status) returning UserId";
-        var userIds = await DbHelper.QueryAsync<int>(sql, model);
-        return userIds.First();
+        return await DbHelper.QueryScalarAsync<int>(sql, model);
     }
 }

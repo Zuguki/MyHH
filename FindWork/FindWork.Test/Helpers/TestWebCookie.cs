@@ -24,4 +24,6 @@ public class TestWebCookie : IWebCookie
     {
         return cookies.ContainsKey(cookieName) ? cookies[cookieName] : null;
     }
+
+    public void Clear() => cookies.Clear();
 }

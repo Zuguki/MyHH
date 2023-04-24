@@ -10,7 +10,7 @@ public class UserTokenDAL : IUserTokenDAL
         var tokenId = Guid.NewGuid();
         var sql = @"insert into UserToken (UserTokenId, UserId, Created)
                     values(@tokenId, @userId, @date)";
-        await DbHelper.ExecuteScalarAsync(sql, new {tokenId = tokenId, userId = userId, date = DateTime.Now});
+        await DbHelper.QueryScalarAsync<int>(sql, new {tokenId = tokenId, userId = userId, date = DateTime.Now});
         
         return tokenId;
     }
@@ -21,6 +21,6 @@ public class UserTokenDAL : IUserTokenDAL
                     from UserToken
                     where UserTokenId = @tokenId";
 
-        return await DbHelper.ExecuteScalarAsync(sql, new {tokenId = tokenId});
+        return await DbHelper.QueryScalarAsync<int>(sql, new {tokenId = tokenId});
     }
 }

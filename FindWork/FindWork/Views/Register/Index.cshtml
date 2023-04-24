@@ -17,7 +17,16 @@
             <input name="Password" type="password"/>
             <div class="error">@Html.ValidationMessageFor(item => item.Password)</div>
         </p>
+        
 
         <button>Sign In</button>
+        
+        <div class="g-recaptcha" data-sitekey="@ViewBag.CaptchaSitekey"></div>
+        @* <div class="g-recaptcha" data-sitekey="6LfOXbIlAAAAALgAiTLS2XbTuaTjdLW6plmG9Elv"></div> *@
+        <div class="error">@Html.ValidationMessage("captcha")</div>
     </form>
 </div>
+
+@section Scripts {
+    <script src="https://www.google.com/recaptcha/api.js"></script>
+}

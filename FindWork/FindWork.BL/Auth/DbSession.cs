@@ -41,14 +41,14 @@ public class DbSession : IDbSession
         return session;
     }
 
-    public async Task<int> SetUserId(int userId)
+    public async Task SetUserId(int userId)
     {
         var session = await GetSession();
         session.DbSessionId = Guid.NewGuid();
         session.UserId = userId;
         
         CreateSessionCookie(session.DbSessionId);
-        return await sessionDal.Create(session);
+        await sessionDal.Create(session);
     }
 
     public async Task<int?> GetUserId()

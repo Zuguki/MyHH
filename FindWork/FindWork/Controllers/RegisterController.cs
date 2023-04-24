@@ -11,17 +11,20 @@ namespace FindWork.Controllers;
 [SiteNotAuthorize]
 public class RegisterController : Controller
 {
-    private readonly IAuth _auth;
+    private readonly IAuth auth;
+    private readonly ICaptcha captcha;
 
-    public RegisterController(IAuth auth)
+    public RegisterController(IAuth auth, ICaptcha captcha)
     {
-        _auth = auth;
+        this.auth = auth;
+        this.captcha = captcha;
     }
 
     [HttpGet]
     [Route("/register")]
     public IActionResult Index()
     {
+        ViewBag.CaptchaSitekey = captcha.SiteKey!;
         return View("Index", new RegisterViewModel());
     }
 
@@ -30,11 +33,16 @@ public class RegisterController : Controller
     [AutoValidateAntiforgeryToken]
     public async Task<IActionResult> IndexSave(RegisterViewModel model)
     {
+        ViewBag.CaptchaSitekey = captcha.SiteKey!;
+        var isCaptchaValid = await captcha.ValidateToken(Request.Form["g-recaptcha-response"]!);
+        if (!isCaptchaValid)
+            ModelState.TryAddModelError("captcha", "Incorrect Captcha");
+        
         if (ModelState.IsValid)
         {
             try
             {
-                await _auth.Register(AuthMapper.MapRegistrationViewModelToUserModel(model));
+                await auth.Register(AuthMapper.MapRegistrationViewModelToUserModel(model));
                 return Redirect("/");
             }
             catch (DuplicateEmailException)

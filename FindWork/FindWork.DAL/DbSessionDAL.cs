@@ -11,7 +11,7 @@ public class DbSessionDAL : IDbSessionDAL
     {
         var sql = @"insert into DbSession (DbSessionId, SessionData, Created, LastAccessed, UserId)
                     values (@DbSessionId, @SessionData, @Created, @LastAccessed, @UserId)";
-        return await DbHelper.ExecuteScalarAsync(sql, model);
+        return await DbHelper.QueryScalarAsync<int>(sql, model);
     }
     
     public async Task<SessionModel?> Get(Guid sessionId)
@@ -38,6 +38,6 @@ public class DbSessionDAL : IDbSessionDAL
         var sql = @"update DbSession
                     set SessionData = @SessionData, LastAccessed = @LastAccessed, UserId = @UserId
                     where DbSessionId = @sessionId";
-        return await DbHelper.ExecuteScalarAsync(sql, model);
+        return await DbHelper.QueryScalarAsync<int>(sql, model);
     }
 }
