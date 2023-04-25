@@ -90,6 +90,9 @@ public class DbSession : IDbSession
     private void CreateSessionCookie(Guid sessionId)
     {
         webCookie.Delete(AuthConstants.SessionCookieName);
-        webCookie.AddSecure(AuthConstants.SessionCookieName, sessionId.ToString());
+        webCookie.Add(AuthConstants.SessionCookieName, sessionId.ToString());
+        
+        //TODO: AddSecure
+        // webCookie.AddSecure(AuthConstants.SessionCookieName, sessionId.ToString());
     }
 }

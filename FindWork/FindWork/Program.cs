@@ -25,9 +25,13 @@ builder.Services.AddScoped<IDbSession, DbSession>();
 builder.Services.AddSingleton<IWebCookie, WebCookie>();
 builder.Services.AddSingleton<IProfile, Profile>();
 
-builder.Services.AddSingleton<ICaptcha>(provider => new GoogleCaptcha(
-    builder.Configuration["Captcha:SiteKey"],
-    builder.Configuration["Captcha:SecretKey"]));
+
+if (builder.Environment.IsDevelopment())
+    builder.Services.AddSingleton<ICaptcha, DevCaptcha>();
+else
+    builder.Services.AddSingleton<ICaptcha>(provider => new GoogleCaptcha(
+        builder.Configuration["Captcha:SiteKey"],
+        builder.Configuration["Captcha:SecretKey"]));
 
 builder.Services.AddMvc();
 

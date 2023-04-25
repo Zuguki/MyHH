@@ -45,7 +45,9 @@ public class Auth : IAuth
         if (rememberMe)
         {
             var tokenId = await userToken.Create(user.UserId ?? 0);
-            webCookie.AddSecure(AuthConstants.RememberMeCookieName, tokenId.ToString(), AuthConstants.RememberMeDays);
+            webCookie.Add(AuthConstants.RememberMeCookieName, tokenId.ToString(), AuthConstants.RememberMeDays);
+            // TODO: AddSecure
+            // webCookie.AddSecure(AuthConstants.RememberMeCookieName, tokenId.ToString(), AuthConstants.RememberMeDays);
         }
         return user.UserId ?? 0;
     }
