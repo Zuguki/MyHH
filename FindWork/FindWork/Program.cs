@@ -1,7 +1,9 @@
 using FindWork.BL.Auth;
+using FindWork.BL.Email;
 using FindWork.BL.General;
 using FindWork.BL.Profile;
 using FindWork.DAL;
+using FindWork.DAL.Email;
 using FindWork.DAL.Profile;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -16,6 +18,8 @@ builder.Services.AddSingleton<IAuthDAL, AuthDAL>();
 builder.Services.AddSingleton<IUserTokenDAL, UserTokenDAL>();
 builder.Services.AddSingleton<IDbSessionDAL, DbSessionDAL>();
 builder.Services.AddSingleton<IProfileDAL, ProfileDAL>();
+builder.Services.AddSingleton<IEmailQueueDAL, EmailQueueDAL>();
+builder.Services.AddSingleton<IUserSecurityDAL, UserSecurityDAL>();
 
 builder.Services.AddScoped<IAuth, Auth>();
 builder.Services.AddSingleton<IEncrypt, Encrypt>();
@@ -24,6 +28,8 @@ builder.Services.AddScoped<ICurrentUser, CurrentUser>();
 builder.Services.AddScoped<IDbSession, DbSession>();
 builder.Services.AddSingleton<IWebCookie, WebCookie>();
 builder.Services.AddSingleton<IProfile, Profile>();
+builder.Services.AddSingleton<IEmailQueue, EmailQueue>();
+builder.Services.AddSingleton<IUserSecurity, UserSecurity>();
 
 
 if (builder.Environment.IsDevelopment())

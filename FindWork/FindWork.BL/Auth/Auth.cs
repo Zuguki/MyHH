@@ -14,14 +14,16 @@ public class Auth : IAuth
     private readonly IDbSession dbSession;
     private readonly IUserTokenDAL userToken;
     private readonly IWebCookie webCookie;
+    private readonly IUserSecurity userSecurity;
 
-    public Auth(IAuthDAL authDal, IEncrypt encrypt, IDbSession dbSession, IUserTokenDAL userToken, IWebCookie webCookie)
+    public Auth(IAuthDAL authDal, IEncrypt encrypt, IDbSession dbSession, IUserTokenDAL userToken, IWebCookie webCookie, IUserSecurity userSecurity)
     {
         this.authDal = authDal;
         this.encrypt = encrypt;
         this.dbSession = dbSession;
         this.userToken = userToken;
         this.webCookie = webCookie;
+        this.userSecurity = userSecurity;
     }
 
     public async Task<int> CreateUser(UserModel model)
@@ -65,7 +67,8 @@ public class Auth : IAuth
         {
             await dbSession.Lock();
             await ValidateEmail(model.Email);
-            await CreateUser(model);
+            var userId = await CreateUser(model);
+            await userSecurity.CreateUserVerification(userId, model.Email);
             scope.Complete();
         }
     }
